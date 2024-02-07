@@ -14,15 +14,15 @@ router.get('/phonebooks', async function (req, res, next) {
   }
 });
 
-// router.post('/phonebooks', async function (req, res, next) {
-//   try {
-//     const { name, phone } = req.body
-//     const user = await User.create({ name, phone })
-//     res.json(user)
-//   } catch (error) {
-//     res.status(500).json({ err: error.message })
-//   }
-// });
+router.post('/phonebooks', async function (req, res, next) {
+  try {
+    const { name, phone } = req.body
+    const user = await User.create({ name, phone })
+    res.json(user)
+  } catch (error) {
+    res.status(500).json({ err: error.message })
+  }
+});
 
 // router.put('/phonebooks/:id', async function (req, res) {
 //   try {
