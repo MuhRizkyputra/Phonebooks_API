@@ -59,19 +59,57 @@ router.put('/phonebooks/:id/avatar', async function (req, res) {
       return res.status(500).send(err);
 
     try {
-      const profil = await User.findOne({
+      const profile = await User.findOne({
+        where: {
+          id
+        }
+      });
+      if (profile.avatar) {
+        const oldFile = path.join(__dirname, '..', 'public', 'iamges', profile.avatar)
+        try {
+          fs.unllinkSync(oldFile)
+        } catch {
+          const phonebook = await User.update({ avatar: fileName }, {
+            where: {
+              id
+            },
+            returning: true,
+            plain: true
+          })
+          return res.status(201).json(phonebook[1])
+        }
+      }
+      const phonebook = await User.update({ avatar: fileName }, {
         where: {
           id
         },
         returning: true,
         plain: true
-      });
+      })
       return res.status(201).json(phonebook[1])
     } catch (error) {
       res.status(500).json(err)
     }
   })
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 router.delete('/phonebooks/:id', async function (req, res) {
   try {
