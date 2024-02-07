@@ -73,22 +73,22 @@ router.put('/phonebooks/:id/avatar', async function (req, res) {
   })
 })
 
-// router.delete('/phonebooks/:id', async function (req, res) {
-//   try {
-//     const id = req.params.id
+router.delete('/phonebooks/:id', async function (req, res) {
+  try {
+    const id = req.params.id
 
-//     const updatepb = await User.destroy({
-//       where: {
-//         id
-//       },
-//       returning: true,
-//       plain: true
-//     });
-//     res.json(updatepb[1])
-//   } catch (error) {
-//     res.status(500).json({ err: error.message })
-//   }
-// });
+    const updatepb = await User.destroy({
+      where: {
+        id
+      },
+      returning: true,
+      plain: true
+    });
+    res.json(updatepb[1])
+  } catch (error) {
+    res.status(500).json({ err: error.message })
+  }
+});
 
 
 
