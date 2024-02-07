@@ -24,22 +24,22 @@ router.post('/phonebooks', async function (req, res, next) {
   }
 });
 
-// router.put('/phonebooks/:id', async function (req, res) {
-//   try {
-//     const id = req.params.id
-//     const { name, phone } = req.body
-//     const updatepb = await User.update({ name, phone }, {
-//       where: {
-//         id
-//       },
-//       returning: true,
-//       plain: true
-//     });
-//     res.json(updatepb[1])
-//   } catch (error) {
-//     res.status(500).json({ err: error.message })
-//   }
-// });
+router.put('/phonebooks/:id', async function (req, res) {
+  try {
+    const id = req.params.id
+    const { name, phone } = req.body
+    const updatepb = await User.update({ name, phone }, {
+      where: {
+        id
+      },
+      returning: true,
+      plain: true
+    });
+    res.json(updatepb[1])
+  } catch (error) {
+    res.status(500).json({ err: error.message })
+  }
+});
 
 // router.put('/phonebooks/:id/avatar', async function (req, res) {
 //   const id = req.params.id
