@@ -2,13 +2,30 @@ var express = require('express');
 var router = express.Router();
 const { User } = require('../models');
 const fs = require('fs')
-const path = require('path')
+const path = require('path');
+const { Op } = require("sequelize")
 
 /* GET users listing. */
 router.get('/phonebooks', async function (req, res, next) {
   try {
-    const users = await User.findAll()
-    res.json(users)
+    const { page = 1, limit = 30, keyword = "", sort = 'ASC' } = req.query
+
+    const { count, rows } = await User.findAndCountAll({
+      where: {
+        [Op.or]: [
+          { name: { [Op.iLike]: `%${keyword}%` } },
+          { phone: { [Op.iLike]: `%${keyword}%` } }
+        ]
+      }, order: [['name', sort]], limit, offset: (page - 1) * limit
+    })
+    const pages = Math.ceil(count / limit)
+    res.status(200).json({
+      phonebook: rows,
+      page: Number(page),
+      limit: Number(limit),
+      pages: Number(pages),
+      total: count
+    })
   } catch (error) {
     res.status(500).json({ err: error.message })
   }
@@ -17,6 +34,7 @@ router.get('/phonebooks', async function (req, res, next) {
 router.post('/phonebooks', async function (req, res, next) {
   try {
     const { name, phone } = req.body
+    if (!name && !phone) throw Error.message = "name and phone can't be empty"
     const user = await User.create({ name, phone })
     res.json(user)
   } catch (error) {
@@ -28,6 +46,7 @@ router.put('/phonebooks/:id', async function (req, res) {
   try {
     const id = req.params.id
     const { name, phone } = req.body
+    if (!name && !phone) throw Error.message = "name and phone can't be empty"
     const updatepb = await User.update({ name, phone }, {
       where: {
         id
@@ -93,28 +112,9 @@ router.put('/phonebooks/:id/avatar', async function (req, res) {
   })
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 router.delete('/phonebooks/:id', async function (req, res) {
   try {
     const id = req.params.id
-
     const updatepb = await User.destroy({
       where: {
         id
@@ -127,7 +127,5 @@ router.delete('/phonebooks/:id', async function (req, res) {
     res.status(500).json({ err: error.message })
   }
 });
-
-
 
 module.exports = router;
