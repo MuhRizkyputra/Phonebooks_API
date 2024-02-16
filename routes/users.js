@@ -31,12 +31,12 @@ router.get('/phonebooks', async function (req, res, next) {
   }
 });
 
-router.post('/phonebooks', async function (req, res, next) {
+router.post('/phonebooks', async function (req, res) {
   try {
     const { name, phone } = req.body
     if (!name && !phone) throw Error.message = "name and phone can't be empty"
-    const user = await User.create({ name, phone })
-    res.json(user)
+    const phonebook = await User.create({ name, phone })
+    res.status(201).json(phonebook)
   } catch (error) {
     res.status(500).json({ err: error.message })
   }
