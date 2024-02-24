@@ -84,7 +84,7 @@ router.put('/phonebooks/:id/avatar', async function (req, res) {
         }
       });
       if (profile.avatar) {
-        const oldFile = path.join(__dirname, '..', 'public', 'iamges', profile.avatar)
+        const oldFile = path.join(__dirname, '..', 'public', 'images', profile.avatar)
         try {
           fs.unllinkSync(oldFile)
         } catch {
