@@ -8,7 +8,7 @@ const { Op } = require("sequelize")
 /* GET users listing. */
 router.get('/phonebooks', async function (req, res, next) {
   try {
-    const { page = 1, limit = 30, keyword = "", sort = 'ASC' } = req.query
+    const { page = 1, limit = 42, keyword = "", sort = 'ASC' } = req.query
 
     const { count, rows } = await User.findAndCountAll({
       where: {
