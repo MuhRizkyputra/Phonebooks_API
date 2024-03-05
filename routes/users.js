@@ -115,14 +115,23 @@ router.put('/phonebooks/:id/avatar', async function (req, res) {
 router.delete('/phonebooks/:id', async function (req, res) {
   try {
     const id = req.params.id
-    const updatepb = await User.destroy({
+    const user = await User.findOne({
       where: {
         id
       },
+    });
+
+  if (!user) {
+    return res.status(500).json({message: "user not found"})
+  }
+  await User.destroy({
+    where: {
+      id
+    },
       returning: true,
       plain: true
-    });
-    res.json(updatepb[1])
+  })
+    return res.status(201).json(user)
   } catch (error) {
     res.status(500).json({ err: error.message })
   }
